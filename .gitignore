@@ -1,0 +1,5 @@
+.DS_Store
+*.tmp
+
+# 设计/元文档,不对外发布
+docs/specs/
