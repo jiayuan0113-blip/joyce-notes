@@ -73,6 +73,12 @@ category: learning
 
 这就是这个 Skill 的作用：它不是替你努力，而是帮你自动化“复盘 -> 归因 -> 可控动作 -> 明日目标”的思考框架。
 
+完整 Skill 文件在这里：
+
+- 标准 Codex Skill：[skills/daily-reflection-loop/SKILL.md](../skills/daily-reflection-loop/SKILL.md)
+- 框架参考文件：[reflection-frameworks.md](../skills/daily-reflection-loop/references/reflection-frameworks.md)
+- 手机端单文件版：[daily-reflection-loop.skill.md](../skills/daily-reflection-loop.skill.md)
+
 ## 怎么用
 
 你可以直接把下面这段复制给 AI：

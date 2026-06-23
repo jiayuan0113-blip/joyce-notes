@@ -1,0 +1,4 @@
+interface:
+  display_name: "Daily Reflection Loop"
+  short_description: "Use AI to review goals and choose next actions"
+  default_prompt: "Use $daily-reflection-loop to review yesterday's goals and choose today's top three."
