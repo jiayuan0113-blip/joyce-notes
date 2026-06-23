@@ -1,0 +1,403 @@
+:root {
+  color: #222222;
+  background: #fbfaf6;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.app-shell {
+  width: min(100%, 760px);
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  background: #fbfaf6;
+}
+
+.top-bar h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.identity-panel,
+.editor-section {
+  border: 1px solid #e1ddd4;
+  border-radius: 12px;
+  background: #fffdf8;
+  padding: 14px;
+}
+
+.identity-panel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.avatar-placeholder {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #d9ecf5;
+  color: #2c6385;
+  font-weight: 700;
+}
+
+.avatar-upload {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #d9ecf5;
+  color: #2c6385;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.avatar-upload img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-upload input,
+.upload-button input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.upload-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: 10px;
+  border: 1px solid #d8d1c6;
+  border-radius: 10px;
+  padding: 0 14px;
+  background: #ffffff;
+  color: #4d4a45;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 6px;
+  color: #6f6f6f;
+  font-size: 13px;
+}
+
+.inline-input {
+  width: 100%;
+  border: 1px solid #dad4c8;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #ffffff;
+}
+
+.muted-text {
+  margin: 6px 0 0;
+  color: #8a8a8a;
+  font-size: 12px;
+}
+
+.raw-editor {
+  width: 100%;
+  min-height: 240px;
+  resize: vertical;
+  border: 1px solid #dad4c8;
+  border-radius: 10px;
+  padding: 12px;
+  line-height: 1.7;
+  background: #ffffff;
+}
+
+.primary-button,
+.secondary-button {
+  border: 0;
+  border-radius: 10px;
+  min-height: 44px;
+  padding: 0 16px;
+}
+
+.primary-button {
+  width: 100%;
+  margin-top: 12px;
+  background: #222222;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.secondary-button {
+  background: #222222;
+  color: #ffffff;
+}
+
+.export-message {
+  margin: 12px 0 0;
+  color: #4f7d50;
+  font-size: 13px;
+}
+
+.export-surface {
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform: translate(-110vw, -110vh);
+  clip-path: inset(0);
+  width: 1080px;
+  pointer-events: none;
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.xhs-card-page {
+  width: 1080px;
+  height: 1440px;
+  position: relative;
+  overflow: hidden;
+  padding: 78px 86px 86px;
+  background: #fbfaf6;
+  color: #222222;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", sans-serif;
+}
+
+.preview-grid .xhs-card-page {
+  transform: scale(0.18);
+  transform-origin: top left;
+  margin-right: -885px;
+  margin-bottom: -1180px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+}
+
+.card-author {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-bottom: 64px;
+}
+
+.card-avatar,
+.card-avatar-fallback {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+}
+
+.card-avatar {
+  object-fit: cover;
+}
+
+.card-avatar-fallback {
+  display: grid;
+  place-items: center;
+  background: #d9ecf5;
+  color: #2c6385;
+  font-size: 42px;
+  font-weight: 800;
+}
+
+.card-author-name {
+  font-size: 40px;
+  font-weight: 800;
+}
+
+.card-date {
+  margin-top: 8px;
+  color: #858585;
+  font-size: 26px;
+}
+
+.card-content {
+  font-size: 36px;
+  line-height: 1.75;
+}
+
+.card-title {
+  margin: 0 0 42px;
+  font-size: 54px;
+  line-height: 1.35;
+  font-weight: 900;
+}
+
+.card-heading {
+  margin: 42px 0 18px;
+  font-size: 42px;
+  line-height: 1.45;
+  font-weight: 900;
+}
+
+.card-paragraph {
+  margin: 0 0 34px;
+}
+
+.card-highlight {
+  margin: 34px 0;
+  padding: 4px 2px;
+  border-radius: 6px;
+  background: linear-gradient(transparent 56%, rgba(255, 221, 87, 0.46) 56%);
+  font-weight: 700;
+}
+
+.text-bold {
+  font-weight: 700;
+}
+
+.text-highlight {
+  border-radius: 4px;
+  background: linear-gradient(transparent 58%, rgba(255, 221, 87, 0.5) 58%);
+  padding: 0 2px;
+  font-weight: inherit;
+}
+
+.card-image-block {
+  margin: 34px 0 38px;
+}
+
+.card-image-block img,
+.missing-image {
+  width: 100%;
+  max-height: 420px;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+.missing-image {
+  display: grid;
+  place-items: center;
+  height: 240px;
+  border: 2px dashed #d6d0c7;
+  color: #8c8478;
+  background: #f4f1ea;
+}
+
+.card-image-block figcaption {
+  margin-top: 10px;
+  color: #777777;
+  font-size: 24px;
+  line-height: 1.45;
+}
+
+.card-page-count {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 42px;
+  text-align: center;
+  color: #aaa6a0;
+  font-size: 24px;
+}
+
+.identity-fields {
+  flex: 1;
+}
+
+.status-panel,
+.markdown-panel,
+.preview-section {
+  margin-top: 14px;
+  border: 1px solid #e1ddd4;
+  border-radius: 12px;
+  background: #fffdf8;
+  padding: 14px;
+}
+
+.status-panel p {
+  margin: 0 0 6px;
+  color: #5f5a52;
+  font-size: 13px;
+}
+
+.status-panel p:last-child {
+  margin-bottom: 0;
+}
+
+.text-button {
+  border: 0;
+  background: transparent;
+  color: #d34b6a;
+  padding: 0;
+  min-height: 44px;
+}
+
+.preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.preview-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.preview-header span {
+  color: #858585;
+  font-size: 13px;
+}
+
+button:disabled {
+  opacity: 0.45;
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    padding: 12px;
+  }
+
+  .identity-panel,
+  .editor-section,
+  .status-panel,
+  .markdown-panel,
+  .preview-section {
+    border-radius: 10px;
+    padding: 12px;
+  }
+
+  .raw-editor {
+    min-height: 220px;
+  }
+
+  .preview-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "图文卡片",
+  "short_name": "图文卡片",
+  "description": "手机优先的小红书中文图文卡片排版工具",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbfaf6",
+  "theme_color": "#fbfaf6",
+  "icons": []
+}

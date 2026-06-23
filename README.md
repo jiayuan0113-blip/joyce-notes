@@ -13,12 +13,14 @@
 |------|--------|------|
 | 🧭 **产品 / Product** | PM 方法论、产品决策、需求拆解、增长、思考框架 | [product/](product/) |
 | 🤖 **AI 实战 / AI** | 怎么用好 AI、Claude、prompt、自动化工作流 | [ai/](ai/) |
+| 🛠️ **公开小项目 / Projects** | 可运行的小工具、实验项目、工作流样板 | [projects/](projects/) |
 | 💼 **职场 / Work** | 项目管理、协作、沟通、效率工具 | [work/](work/) |
 | 📖 **学习 / Learning** | 读书笔记、认知升级、个人成长 | [learning/](learning/) |
 
 ## 🆕 最新更新
 
 <!-- 每写一篇,在这里加一行,最新的放最上面 -->
+- [小红书图文卡片编辑器](projects/xhs-card-tool/) · 2026-06-23
 - [反思是普通人的复利开关：我的每日三目标 Skill](learning/reflection-compound-growth-skill.md) · 2026-06-21
 
 ---

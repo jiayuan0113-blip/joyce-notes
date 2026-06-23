@@ -1,5 +1,8 @@
 .DS_Store
 *.tmp
+node_modules/
+dist/
+*.tsbuildinfo
 
 # 设计/元文档,不对外发布
 docs/specs/
