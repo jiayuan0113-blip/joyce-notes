@@ -194,8 +194,8 @@ textarea {
   position: relative;
   overflow: hidden;
   padding: 78px 86px 86px;
-  background: #fbfaf6;
-  color: #222222;
+  background: var(--card-bg, #fbfaf6);
+  color: var(--card-text, #222222);
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
     "Microsoft YaHei", sans-serif;
 }
@@ -229,8 +229,8 @@ textarea {
 .card-avatar-fallback {
   display: grid;
   place-items: center;
-  background: #d9ecf5;
-  color: #2c6385;
+  background: var(--card-avatar-bg, #d9ecf5);
+  color: var(--card-avatar-color, #2c6385);
   font-size: 42px;
   font-weight: 800;
 }
@@ -242,7 +242,7 @@ textarea {
 
 .card-date {
   margin-top: 8px;
-  color: #858585;
+  color: var(--card-muted, #858585);
   font-size: 26px;
 }
 
@@ -252,9 +252,9 @@ textarea {
 }
 
 .card-title {
-  margin: 0 0 42px;
-  font-size: 54px;
-  line-height: 1.35;
+  margin: 0 0 52px;
+  font-size: 116px;
+  line-height: 1.2;
   font-weight: 900;
 }
 
@@ -265,27 +265,31 @@ textarea {
   font-weight: 900;
 }
 
+.card-subheading {
+  margin: 32px 0 14px;
+  font-size: 36px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
 .card-paragraph {
   margin: 0 0 34px;
 }
 
-.card-highlight {
-  margin: 34px 0;
-  padding: 4px 2px;
-  border-radius: 6px;
-  background: linear-gradient(transparent 56%, rgba(255, 221, 87, 0.46) 56%);
-  font-weight: 700;
-}
 
 .text-bold {
   font-weight: 700;
 }
 
 .text-highlight {
-  border-radius: 4px;
-  background: linear-gradient(transparent 58%, rgba(255, 221, 87, 0.5) 58%);
+  background: linear-gradient(transparent 60%, var(--card-highlight, rgba(255, 210, 0, 0.52)) 60%);
   padding: 0 2px;
   font-weight: inherit;
+}
+
+.text-underline {
+  text-decoration: underline;
+  text-underline-offset: 6px;
 }
 
 .card-image-block {
@@ -322,12 +326,252 @@ textarea {
   right: 0;
   bottom: 42px;
   text-align: center;
-  color: #aaa6a0;
+  color: var(--card-page-count, #aaa6a0);
   font-size: 24px;
+}
+
+/* ========== Template: magazine (杂志) ========== */
+.xhs-card-page--magazine {
+  font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", Georgia, serif;
+}
+.xhs-card-page--magazine .card-title {
+  font-size: 72px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding-bottom: 48px;
+  margin-bottom: 48px;
+  border-bottom: 3px solid #1a1a1a;
+}
+.xhs-card-page--magazine .card-heading {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+.xhs-card-page--magazine .card-content {
+  font-size: 34px;
+  line-height: 2;
+}
+.xhs-card-page--magazine .card-paragraph {
+  text-indent: 2em;
+}
+.xhs-card-page--magazine .text-highlight {
+  background: none;
+  border-bottom: 2px solid rgba(200, 60, 60, 0.6);
+  padding: 0;
+}
+.xhs-card-page--magazine .card-author {
+  margin-bottom: 52px;
+}
+.xhs-card-page--magazine .card-author-name {
+  font-size: 34px;
+  font-weight: 700;
+}
+.xhs-card-page--magazine .card-date {
+  font-size: 24px;
+  font-style: italic;
+}
+
+/* ========== Template: minimal (极简) ========== */
+.xhs-card-page--minimal {
+  padding: 120px 120px 100px;
+  display: flex;
+  flex-direction: column;
+}
+.xhs-card-page--minimal .card-author {
+  order: 1;
+  margin-bottom: 0;
+  margin-top: auto;
+  gap: 16px;
+}
+.xhs-card-page--minimal .card-avatar,
+.xhs-card-page--minimal .card-avatar-fallback {
+  width: 72px;
+  height: 72px;
+  font-size: 28px;
+}
+.xhs-card-page--minimal .card-author-name {
+  font-size: 28px;
+  font-weight: 600;
+}
+.xhs-card-page--minimal .card-date {
+  font-size: 22px;
+}
+.xhs-card-page--minimal .card-content {
+  font-size: 32px;
+  line-height: 2.1;
+  text-align: center;
+}
+.xhs-card-page--minimal .card-title {
+  font-size: 56px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+.xhs-card-page--minimal .card-heading {
+  font-size: 36px;
+  font-weight: 600;
+  text-align: center;
+  margin: 48px 0 20px;
+}
+.xhs-card-page--minimal .card-paragraph {
+  margin: 0 0 28px;
+}
+.xhs-card-page--minimal .text-highlight {
+  background: none;
+  font-weight: 600;
+}
+.xhs-card-page--minimal .card-page-count {
+  display: none;
+}
+
+/* ========== Template: dark (深色) ========== */
+.xhs-card-page--dark .card-title {
+  font-size: 88px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  margin-bottom: 56px;
+  padding-left: 24px;
+  border-left: 8px solid #ff9f1c;
+}
+.xhs-card-page--dark .card-heading {
+  font-size: 40px;
+  font-weight: 800;
+  color: #ff9f1c;
+}
+.xhs-card-page--dark .card-content {
+  font-size: 34px;
+  line-height: 1.9;
+}
+.xhs-card-page--dark .card-author-name {
+  color: #e0e0e0;
+}
+.xhs-card-page--dark .text-highlight {
+  background: none;
+  color: #ffc857;
+  font-weight: 700;
+}
+.xhs-card-page--dark .card-avatar-fallback {
+  border: 2px solid #444;
+}
+
+/* ========== Template: column (专栏) ========== */
+.xhs-card-page--column {
+  padding: 78px 86px 86px 120px;
+}
+.xhs-card-page--column .card-content {
+  font-size: 34px;
+  line-height: 1.9;
+  border-left: 4px solid #3c6080;
+  padding-left: 40px;
+}
+.xhs-card-page--column .card-title {
+  font-size: 76px;
+  font-weight: 900;
+  margin-bottom: 20px;
+  line-height: 1.25;
+}
+.xhs-card-page--column .card-heading {
+  font-size: 38px;
+  font-weight: 800;
+  margin: 44px 0 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #3c6080;
+}
+.xhs-card-page--column .card-author {
+  margin-bottom: 48px;
+}
+.xhs-card-page--column .card-author-name {
+  font-size: 36px;
+}
+.xhs-card-page--column .card-paragraph {
+  margin: 0 0 30px;
+}
+.xhs-card-page--column .text-highlight {
+  background: linear-gradient(transparent 60%, rgba(60, 120, 180, 0.25) 60%);
+}
+
+/* ========== Template: memo (便签) ========== */
+.xhs-card-page--memo {
+  padding: 60px 80px 80px;
+  border-top: 16px solid #d4a843;
+}
+.xhs-card-page--memo .card-title {
+  font-size: 80px;
+  font-weight: 800;
+  margin-bottom: 40px;
+  transform: rotate(-1deg);
+  transform-origin: left center;
+}
+.xhs-card-page--memo .card-content {
+  font-size: 36px;
+  line-height: 1.85;
+}
+.xhs-card-page--memo .card-heading {
+  font-size: 42px;
+  font-weight: 800;
+  margin: 36px 0 14px;
+  padding: 8px 16px;
+  background: rgba(212, 168, 67, 0.15);
+  border-radius: 8px;
+  display: inline-block;
+}
+.xhs-card-page--memo .card-author {
+  margin-bottom: 44px;
+}
+.xhs-card-page--memo .card-author-name {
+  font-size: 36px;
+}
+.xhs-card-page--memo .text-highlight {
+  background: linear-gradient(transparent 55%, rgba(220, 160, 60, 0.35) 55%);
+}
+.xhs-card-page--memo .card-page-count {
+  font-size: 28px;
+  font-weight: 600;
 }
 
 .identity-fields {
   flex: 1;
+}
+
+.template-panel {
+  margin-bottom: 14px;
+}
+
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.template-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 54px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.1s;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+}
+
+.template-swatch:hover {
+  transform: scale(1.03);
+}
+
+.swatch-name {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.swatch-desc {
+  font-size: 10px;
+  opacity: 0.6;
 }
 
 .status-panel,

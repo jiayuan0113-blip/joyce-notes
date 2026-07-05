@@ -3,6 +3,8 @@ import { parseMarkdownToBlocks } from "./markdownParser";
 import { DEFAULT_PAGINATION_OPTIONS, estimateBlockUnits } from "./paginator";
 
 const numberedHeadingPattern = /^((?:\d+|[一二三四五六七八九十]+)[、.．])\s*(.+)$/;
+const emojiHeadingPattern = /^([\p{Extended_Pictographic}‍️]+)\s+(.{2,24})$/u;
+const bracketHeadingPattern = /^【(.{2,16})】$/;
 const inlineMarkdownPattern = /(\*\*[^*]+\*\*)|(==[^=]+==)/;
 const boldPattern = /\*\*[^*]+\*\*/g;
 const highlightPattern = /==[^=]+==/g;
@@ -55,8 +57,12 @@ function normalizeInlineBreaks(lines: string[]): string[] {
 
     const prev = current[current.length - 1];
     const next = trimmed[0];
-    const separator = isAsciiAlnum(prev) && isAsciiAlnum(next) ? " " : "";
-    current = `${current}${separator}${trimmed}`;
+    if (isAsciiAlnum(prev) && isAsciiAlnum(next)) {
+      current = `${current} ${trimmed}`;
+    } else {
+      paragraphs.push(current);
+      current = trimmed;
+    }
   }
 
   if (current) paragraphs.push(current);
@@ -78,15 +84,25 @@ function hasInlineMarkdown(text: string): boolean {
 }
 
 function isStructuralMarkdown(text: string): boolean {
-  return text.startsWith("#") || text.startsWith("![") || numberedHeadingPattern.test(text);
+  return text.startsWith("#") || text.startsWith("![") || numberedHeadingPattern.test(text) || emojiHeadingPattern.test(text) || bracketHeadingPattern.test(text);
 }
 
 function isHighlightCandidate(text: string): boolean {
-  return (
-    text.length <= 64 &&
-    (/^(而是|所以|真正|最重要|核心|关键|我现在的感受)/.test(text) ||
-      /关键不是.+而是/.test(text))
-  );
+  if (text.length > 64 || text.length < 4) return false;
+
+  // contrast / turning-point patterns
+  if (/不是.{2,}而是|不在于.{2,}而在于|与其.{2,}不如/.test(text)) return true;
+
+  // conclusion / insight starters
+  if (/^(而是|所以|因此|真正|最重要|核心|关键|本质|归根结底|说到底|一句话|换句话说|简单来说)/.test(text)) return true;
+
+  // realization / reflection
+  if (/我(终于)?(发现|意识到|明白|懂了|理解了|学到)|最大的(感悟|收获|变化|教训|体会)/.test(text)) return true;
+
+  // emphasis / call-to-action
+  if (/^(记住|请记住|重要的是|别忘了|千万别|千万不要|一定要|必须|这才是|原来|答案是|秘诀|真相是)/.test(text)) return true;
+
+  return false;
 }
 
 function createQuotedBoldCandidate(text: string): AutoEmphasisCandidate | null {
@@ -196,6 +212,22 @@ export function processText(raw: string): ProcessedText {
     if (numbered) {
       headingCount += 1;
       const heading = `## ${numbered[1]}${numbered[2]}`;
+      addChunkToPageState(pageState, heading);
+      return heading;
+    }
+
+    const emoji = paragraph.match(emojiHeadingPattern);
+    if (emoji) {
+      headingCount += 1;
+      const heading = `## ${emoji[1]} ${emoji[2]}`;
+      addChunkToPageState(pageState, heading);
+      return heading;
+    }
+
+    const bracket = paragraph.match(bracketHeadingPattern);
+    if (bracket) {
+      headingCount += 1;
+      const heading = `## ${bracket[1]}`;
       addChunkToPageState(pageState, heading);
       return heading;
     }

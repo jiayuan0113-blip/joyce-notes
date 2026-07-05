@@ -21,8 +21,8 @@
 ## 🆕 最新更新
 
 <!-- 每写一篇,在这里加一行,最新的放最上面 -->
+- [小红书图文卡片编辑器](projects/xhs-card-tool/) · 2026-07-05
 - [daily-reflection-loop｜每日反思 Skill](skills/daily-reflection-loop/SKILL.md) · 2026-06-23
-- [小红书图文卡片编辑器](projects/xhs-card-tool/) · 2026-06-23
 - [反思是普通人的复利开关：我的每日三目标 Skill](learning/reflection-compound-growth-skill.md) · 2026-06-21
 
 ---

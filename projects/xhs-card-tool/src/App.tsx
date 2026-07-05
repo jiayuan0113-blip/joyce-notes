@@ -6,12 +6,27 @@ import { processText } from "./domain/textProcessor";
 import { loadProject, saveProject } from "./services/projectStorage";
 import { exportCardNodes, triggerDownload } from "./services/exportService";
 import type { CardPage, ImageAsset } from "./domain/types";
+import { TEMPLATES } from "./domain/templates";
 
-function fileToDataUrl(file: File): Promise<string> {
+function fileToDataUrl(file: File, maxSize = 1200): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
     reader.onerror = () => reject(reader.error);
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error("Image decode failed"));
+      img.onload = () => {
+        const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
+        const w = Math.round(img.width * scale);
+        const h = Math.round(img.height * scale);
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext("2d")!.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL("image/jpeg", 0.82));
+      };
+      img.src = String(reader.result);
+    };
     reader.readAsDataURL(file);
   });
 }
@@ -34,6 +49,7 @@ export function App() {
   const [pages, setPages] = useState<CardPage[]>([]);
   const [images, setImages] = useState<ImageAsset[]>([]);
   const [avatarDataUrl, setAvatarDataUrl] = useState<string | undefined>();
+  const [templateId, setTemplateId] = useState("classic");
   const [showMarkdown, setShowMarkdown] = useState(false);
   const [exportMessage, setExportMessage] = useState("");
   const previewRef = useRef<HTMLDivElement | null>(null);
@@ -49,6 +65,7 @@ export function App() {
       setImages(stored.images);
       setPages(stored.pages);
       setAvatarDataUrl(stored.avatarDataUrl);
+      if (stored.templateId) setTemplateId(stored.templateId);
     }
     setIsHydrated(true);
   }, []);
@@ -64,8 +81,9 @@ export function App() {
       processedMarkdown,
       images,
       pages,
+      templateId,
     });
-  }, [authorName, avatarDataUrl, generatedDate, isHydrated, images, pages, rawText, processedMarkdown]);
+  }, [authorName, avatarDataUrl, generatedDate, isHydrated, images, pages, rawText, processedMarkdown, templateId]);
 
   function handleProcess() {
     setGeneratedDate(formatDate(new Date()));
@@ -102,7 +120,7 @@ export function App() {
 
   async function handleAvatarUpload(file: File | undefined) {
     if (!file) return;
-    setAvatarDataUrl(await fileToDataUrl(file));
+    setAvatarDataUrl(await fileToDataUrl(file, 200));
   }
 
   async function handleInlineImageUpload(file: File | undefined) {
@@ -123,7 +141,8 @@ export function App() {
       const result = await exportCardNodes(nodes);
       if (result.zipBlob) {
         const zipUrl = URL.createObjectURL(result.zipBlob);
-        triggerDownload("xhs_cards.zip", zipUrl);
+        const today = new Date().toISOString().slice(0, 10);
+        triggerDownload(`xhs_cards_${today}.zip`, zipUrl);
         setTimeout(() => {
           URL.revokeObjectURL(zipUrl);
         }, 0);
@@ -173,6 +192,23 @@ export function App() {
             onChange={(event) => setAuthorName(event.target.value)}
           />
           <p className="muted-text">{generatedDate} 自动生成</p>
+        </div>
+      </section>
+
+      <section className="template-panel" aria-label="模板选择">
+        <div className="template-grid">
+          {TEMPLATES.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              className={`template-swatch${templateId === t.id ? " active" : ""}`}
+              onClick={() => setTemplateId(t.id)}
+              style={{ background: t.vars["--card-bg"], color: t.vars["--card-text"], borderColor: templateId === t.id ? t.vars["--card-text"] : "transparent" }}
+            >
+              <span className="swatch-name">{t.name}</span>
+              <span className="swatch-desc">{t.description}</span>
+            </button>
+          ))}
         </div>
       </section>
 
@@ -242,6 +278,7 @@ export function App() {
                 dateText={generatedDate}
                 images={images}
                 avatarDataUrl={avatarDataUrl}
+                templateId={templateId}
                 key={page.id}
                 page={page}
                 pageCount={pages.length}
@@ -272,11 +309,12 @@ export function App() {
                 dateText={generatedDate}
                 images={images}
                 avatarDataUrl={avatarDataUrl}
+                templateId={templateId}
                 key={`export-${page.id}`}
-              page={page}
-              pageCount={pages.length}
-              pageIndex={index + 1}
-            />
+                page={page}
+                pageCount={pages.length}
+                pageIndex={index + 1}
+              />
           ))}
         </section>
       ) : null}

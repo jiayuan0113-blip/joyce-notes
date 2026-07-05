@@ -9,7 +9,7 @@ function nextId(prefix: string): string {
 
 function parseRuns(text: string): TextRun[] {
   const runs: TextRun[] = [];
-  const pattern = /(\*\*([^*]+)\*\*)|(==([^=]+)==)/g;
+  const pattern = /(\*\*([^*]+)\*\*)|(==([^=]+)==)|(<u>([^<]+)<\/u>)/g;
   let lastIndex = 0;
   let match: RegExpExecArray | null;
 
@@ -19,6 +19,7 @@ function parseRuns(text: string): TextRun[] {
     }
     if (match[2]) runs.push({ text: match[2], bold: true });
     if (match[4]) runs.push({ text: match[4], highlight: true });
+    if (match[6]) runs.push({ text: match[6], underline: true });
     lastIndex = match.index + match[0].length;
   }
 
@@ -69,6 +70,13 @@ export function parseMarkdownToBlocks(markdown: string, _images: ImageAsset[]): 
       const text = chunk.slice(3).trim();
       const runs = parseRuns(text);
       blocks.push({ id: nextId("heading"), type: "heading", text: plainTextFromRuns(runs), runs });
+      continue;
+    }
+
+    if (chunk.startsWith("### ")) {
+      const text = chunk.slice(4).trim();
+      const runs = parseRuns(text);
+      blocks.push({ id: nextId("subheading"), type: "subheading", text: plainTextFromRuns(runs), runs });
       continue;
     }
 

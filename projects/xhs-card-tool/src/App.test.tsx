@@ -11,6 +11,17 @@ vi.mock("./services/exportService", () => ({
   triggerDownload: vi.fn(),
 }));
 
+class MockImageElement {
+  width = 100;
+  height = 100;
+  onload: (() => void) | null = null;
+  onerror: (() => void) | null = null;
+
+  set src(_value: string) {
+    queueMicrotask(() => this.onload?.());
+  }
+}
+
 describe("App", () => {
   beforeEach(() => {
     localStorage.clear();
@@ -154,16 +165,28 @@ describe("App", () => {
 
   it("uploads an inline image and inserts markdown syntax", async () => {
     const user = userEvent.setup();
-    render(<App />);
+    vi.stubGlobal("Image", MockImageElement);
+    const getContextSpy = vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue({
+      drawImage: vi.fn(),
+    } as unknown as CanvasRenderingContext2D);
+    const toDataUrlSpy = vi.spyOn(HTMLCanvasElement.prototype, "toDataURL").mockReturnValue("data:image/jpeg;base64,test");
 
-    const file = new File(["fake"], "peter-yang.jpg", { type: "image/jpeg" });
-    const input = screen.getByLabelText("上传正文图片");
-    await user.upload(input, file);
+    try {
+      render(<App />);
 
-    expect(await screen.findByText("已添加图片 peter-yang.jpg")).toBeInTheDocument();
-    const rawTextInput = screen.getByLabelText("原始正文") as HTMLTextAreaElement;
-    const rawText = rawTextInput.value;
-    expect(rawText).toContain("![peter-yang.jpg](img-");
+      const file = new File(["fake"], "peter-yang.jpg", { type: "image/jpeg" });
+      const input = screen.getByLabelText("上传正文图片");
+      await user.upload(input, file);
+
+      expect(await screen.findByText("已添加图片 peter-yang.jpg")).toBeInTheDocument();
+      const rawTextInput = screen.getByLabelText("原始正文") as HTMLTextAreaElement;
+      const rawText = rawTextInput.value;
+      expect(rawText).toContain("![peter-yang.jpg](img-");
+    } finally {
+      getContextSpy.mockRestore();
+      toDataUrlSpy.mockRestore();
+      vi.unstubAllGlobals();
+    }
   });
 
   it("revokes zip object URL asynchronously after triggering zip download", async () => {
@@ -206,7 +229,8 @@ describe("App", () => {
     });
 
     expect(vi.mocked(exportCardNodes)).toHaveBeenCalledTimes(1);
-    expect(vi.mocked(triggerDownload)).toHaveBeenCalledWith("xhs_cards.zip", "blob:zip-url");
+    const today = new Date().toISOString().slice(0, 10);
+    expect(vi.mocked(triggerDownload)).toHaveBeenCalledWith(`xhs_cards_${today}.zip`, "blob:zip-url");
     expect(revokeObjectURL).not.toHaveBeenCalled();
     expect(setTimeoutSpy).toHaveBeenCalledWith(expect.any(Function), 0);
     vi.runAllTimers();
@@ -278,7 +302,8 @@ describe("App", () => {
     expect(capturedNodes.every((node) => node.classList.contains("xhs-card-page"))).toBe(true);
     expect(capturedNodes.every((node) => node.closest(".export-surface") !== null)).toBe(true);
     expect(capturedNodes.every((node) => node.closest(".preview-grid") === null)).toBe(true);
-    expect(vi.mocked(triggerDownload)).toHaveBeenCalledWith("xhs_cards.zip", "blob:zip-url");
+    const today = new Date().toISOString().slice(0, 10);
+    expect(vi.mocked(triggerDownload)).toHaveBeenCalledWith(`xhs_cards_${today}.zip`, "blob:zip-url");
 
     if (originalCreateObjectURL) {
       (URL as { createObjectURL: typeof URL.createObjectURL }).createObjectURL = originalCreateObjectURL;

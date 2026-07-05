@@ -9,11 +9,12 @@ export type TextRun = {
   text: string;
   bold?: boolean;
   highlight?: boolean;
+  underline?: boolean;
 };
 
 export type TextBlock = {
   id: string;
-  type: "title" | "heading" | "paragraph" | "quote" | "highlight";
+  type: "title" | "heading" | "subheading" | "paragraph" | "quote" | "highlight";
   text: string;
   runs: TextRun[];
 };
@@ -50,4 +51,5 @@ export type CardProject = {
   processedMarkdown: string;
   images: ImageAsset[];
   pages: CardPage[];
+  templateId?: string;
 };

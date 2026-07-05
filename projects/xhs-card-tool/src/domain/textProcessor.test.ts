@@ -35,7 +35,9 @@ describe("processText", () => {
     const result = processText(raw);
 
     expect(result.markdown).toContain("# 让 Codex 起飞的 10 个技巧");
-    expect(result.markdown).toContain("最近我重度使用 Codex，每天都把它放进真实工作流里。");
+    expect(result.markdown).toContain("最近我重度使用 Codex，");
+    expect(result.markdown).toContain("每天都把它放进真实工作流里。");
+    expect(result.markdown).not.toContain("Codex，每天");
     expect(result.markdown).toContain("## 1、给 Codex 建一套共享记忆");
     expect(result.markdown).toContain("核心规则放 AGENTS.md，项目背景放 Obsidian。");
     expect(result.notes).toContain("已清理多余空行");

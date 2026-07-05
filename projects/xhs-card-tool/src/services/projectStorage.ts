@@ -28,7 +28,7 @@ function isCardBlock(value: unknown): value is { type: string } {
   if (typeof value.id !== "string") return false;
 
   const type = value.type;
-  if (type !== "title" && type !== "heading" && type !== "paragraph" && type !== "quote" && type !== "highlight") {
+  if (type !== "title" && type !== "heading" && type !== "subheading" && type !== "paragraph" && type !== "quote" && type !== "highlight") {
     if (type === "image") {
       return typeof value.imageId === "string" && typeof value.alt === "string";
     }
@@ -74,7 +74,9 @@ function isProjectPayload(data: unknown): data is CardProject {
   ].every((key) => typeof candidate[key] === "string");
   const avatarIsStringIfPresent =
     candidate.avatarDataUrl === undefined || typeof candidate.avatarDataUrl === "string";
-  return hasRequiredStrings && avatarIsStringIfPresent && hasValidNestedMembers(candidate);
+  const templateIsStringIfPresent =
+    candidate.templateId === undefined || typeof candidate.templateId === "string";
+  return hasRequiredStrings && avatarIsStringIfPresent && templateIsStringIfPresent && hasValidNestedMembers(candidate);
 }
 
 export function saveProject(project: CardProject): void {
