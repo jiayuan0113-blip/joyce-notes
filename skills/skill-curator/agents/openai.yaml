@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill Curator"
+  short_description: "Audit, clarify, and safely prune AI skills"
+  default_prompt: "Use $skill-curator to audit my installed skills without changing anything yet."
