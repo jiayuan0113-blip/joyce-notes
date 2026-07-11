@@ -6,6 +6,7 @@ import unittest
 SKILL_DIR = Path(__file__).resolve().parents[1]
 SKILL_PATH = SKILL_DIR / "SKILL.md"
 OPENAI_YAML = SKILL_DIR / "agents" / "openai.yaml"
+SINGLE_FILE = SKILL_DIR.parent / "skill-curator.skill.md"
 
 
 def frontmatter_value(text: str, key: str) -> str:
@@ -54,6 +55,19 @@ class SkillContractTests(unittest.TestCase):
         text = OPENAI_YAML.read_text(encoding="utf-8")
         self.assertIn('display_name: "Skill Curator"', text)
         self.assertIn("$skill-curator", text)
+
+    def test_single_file_version_preserves_safety_boundaries(self):
+        text = SINGLE_FILE.read_text(encoding="utf-8")
+        for required in (
+            "read-only",
+            "mtime is not usage evidence",
+            "second explicit confirmation",
+            "paste the directory listing",
+            "Fact",
+            "Heuristic",
+            "Unknown",
+        ):
+            self.assertIn(required, text)
 
 
 if __name__ == "__main__":

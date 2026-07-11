@@ -7,7 +7,7 @@ description: Use when installed AI skills, custom instructions, or workflow rule
 
 ## Core Principle
 
-Treat cleanup as evidence-based curation, not a file-deletion shortcut. Start read-only, label uncertainty, and make every state change reversible before considering permanent deletion.
+Treat cleanup as evidence-based curation. Start read-only, label uncertainty, and make changes reversible before considering permanent deletion.
 
 ## Workflow
 
