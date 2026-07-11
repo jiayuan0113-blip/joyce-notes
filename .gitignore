@@ -3,6 +3,7 @@
 node_modules/
 dist/
 *.tsbuildinfo
+.worktrees/
 
 # 设计/元文档,不对外发布
 docs/specs/
