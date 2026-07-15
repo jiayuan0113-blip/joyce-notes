@@ -80,6 +80,28 @@ export function parseMarkdownToBlocks(markdown: string, _images: ImageAsset[]): 
       continue;
     }
 
+    if (chunk.startsWith("> ")) {
+      const text = chunk
+        .split("\n")
+        .map((line) => line.replace(/^>\s?/, "").trim())
+        .filter(Boolean)
+        .join(" ");
+      const quoteRuns = parseRuns(text);
+      blocks.push({ id: nextId("quote"), type: "quote", text: plainTextFromRuns(quoteRuns), runs: quoteRuns });
+      continue;
+    }
+
+    if (/^[-·•]\s/.test(chunk)) {
+      const lines = chunk.split("\n").map((l) => l.trim()).filter(Boolean);
+      for (const line of lines) {
+        const text = line.replace(/^[-·•]\s*/, "").trim();
+        if (!text) continue;
+        const lineRuns = parseRuns(text);
+        blocks.push({ id: nextId("list"), type: "listItem", text: plainTextFromRuns(lineRuns), runs: lineRuns });
+      }
+      continue;
+    }
+
     const runs = parseRuns(chunk.replace(/\n/g, " "));
     const hasOnlyHighlight = runs.every((run) => run.highlight) && plainTextFromRuns(runs).length <= 42;
     blocks.push({

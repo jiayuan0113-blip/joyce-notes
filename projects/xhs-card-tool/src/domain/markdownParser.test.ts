@@ -52,6 +52,27 @@ describe("parseMarkdownToBlocks", () => {
     expect(blocks).toMatchObject([{ type: "paragraph", text: "中文 English 混排" }]);
   });
 
+  it("parses list items into individual bullet blocks", () => {
+    const blocks = parseMarkdownToBlocks("- 第一条\n- 第二条 **加粗**", []);
+
+    expect(blocks).toMatchObject([
+      { type: "listItem", text: "第一条" },
+      { type: "listItem", text: "第二条 加粗" },
+    ]);
+  });
+
+  it("parses blockquotes with inline emphasis", () => {
+    const blocks = parseMarkdownToBlocks("> 真正的成长\n> 来自 ==被反驳==。", []);
+
+    expect(blocks).toMatchObject([
+      {
+        type: "quote",
+        text: "真正的成长 来自 被反驳。",
+        runs: [{ text: "真正的成长 来自 " }, { text: "被反驳", highlight: true }, { text: "。" }],
+      },
+    ]);
+  });
+
   it("parses inline emphasis inside markdown headings", () => {
     const blocks = parseMarkdownToBlocks("# 我把 **Codex** 当 ==远程同事== 用", []);
 

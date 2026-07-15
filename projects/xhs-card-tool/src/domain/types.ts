@@ -14,7 +14,7 @@ export type TextRun = {
 
 export type TextBlock = {
   id: string;
-  type: "title" | "heading" | "subheading" | "paragraph" | "quote" | "highlight";
+  type: "title" | "heading" | "subheading" | "paragraph" | "quote" | "highlight" | "listItem";
   text: string;
   runs: TextRun[];
 };

@@ -28,7 +28,7 @@ function isCardBlock(value: unknown): value is { type: string } {
   if (typeof value.id !== "string") return false;
 
   const type = value.type;
-  if (type !== "title" && type !== "heading" && type !== "subheading" && type !== "paragraph" && type !== "quote" && type !== "highlight") {
+  if (type !== "title" && type !== "heading" && type !== "subheading" && type !== "paragraph" && type !== "quote" && type !== "highlight" && type !== "listItem") {
     if (type === "image") {
       return typeof value.imageId === "string" && typeof value.alt === "string";
     }
@@ -79,8 +79,15 @@ function isProjectPayload(data: unknown): data is CardProject {
   return hasRequiredStrings && avatarIsStringIfPresent && templateIsStringIfPresent && hasValidNestedMembers(candidate);
 }
 
-export function saveProject(project: CardProject): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(project));
+export function saveProject(project: CardProject): boolean {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(project));
+    return true;
+  } catch {
+    // Draft with large inline images can exceed the localStorage quota;
+    // autosave is best-effort, so degrade to keeping the draft in memory only.
+    return false;
+  }
 }
 
 export function loadProject(): CardProject | null {

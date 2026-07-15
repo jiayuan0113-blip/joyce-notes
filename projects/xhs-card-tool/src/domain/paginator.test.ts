@@ -42,4 +42,26 @@ describe("paginateBlocks", () => {
     expect(pages.length).toBeGreaterThan(1);
     expect(pages.every((page) => page.blocks.length > 0)).toBe(true);
   });
+
+  it("merges a too-light trailing page back into the previous page", () => {
+    const blocks = [
+      ...Array.from({ length: 9 }, (_, index) => paragraph(`p${index}`, 2)),
+      paragraph("orphan", 1),
+    ];
+    const pages = paginateBlocks(blocks);
+
+    const lastPage = pages[pages.length - 1];
+    expect(lastPage.blocks.length).toBeGreaterThan(1);
+  });
+
+  it("keeps a light page created by a forced break", () => {
+    const pages = paginateBlocks([
+      paragraph("p1"),
+      { id: "b1", type: "pageBreak" },
+      paragraph("orphan"),
+    ]);
+
+    expect(pages).toHaveLength(2);
+    expect(pages[1].blocks.map((block) => block.id)).toEqual(["orphan"]);
+  });
 });

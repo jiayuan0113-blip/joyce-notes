@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import type { CardBlock, CardPage, ImageAsset, TextBlock, TextRun } from "../domain/types";
 import { getTemplate } from "../domain/templates";
 
@@ -10,6 +11,7 @@ type CardPageViewProps = {
   pageIndex?: number;
   pageCount?: number;
   templateId?: string;
+  showOverflowBadge?: boolean;
 };
 
 function renderRuns(runs: TextRun[]) {
@@ -50,6 +52,12 @@ function TextBlockView({ block }: { block: TextBlock }) {
   }
   if (block.type === "subheading") {
     return <h4 className="card-subheading">{renderRuns(block.runs)}</h4>;
+  }
+  if (block.type === "listItem") {
+    return <p className="card-list-item"><span className="list-bullet">·</span>{renderRuns(block.runs)}</p>;
+  }
+  if (block.type === "quote") {
+    return <blockquote className="card-quote">{renderRuns(block.runs)}</blockquote>;
   }
   if (block.type === "highlight") {
     return <p className="card-paragraph">{renderRuns(block.runs)}</p>;
@@ -100,11 +108,36 @@ export function CardPageView({
   pageIndex,
   pageCount,
   templateId,
+  showOverflowBadge,
 }: CardPageViewProps) {
   const tid = templateId ?? "classic";
   const template = getTemplate(tid);
+  const articleRef = useRef<HTMLElement | null>(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+
+  useEffect(() => {
+    if (!showOverflowBadge) return;
+    const article = articleRef.current;
+    if (!article) return;
+
+    const measure = () => {
+      setIsOverflowing(article.scrollHeight > article.clientHeight + 1);
+    };
+    measure();
+
+    const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(measure);
+    observer?.observe(article);
+    for (const img of Array.from(article.querySelectorAll("img"))) {
+      img.addEventListener("load", measure);
+    }
+    return () => observer?.disconnect();
+  }, [showOverflowBadge, page, templateId]);
+
   return (
-    <article className={`xhs-card-page xhs-card-page--${tid}`} data-page-id={page.id} style={template.vars as React.CSSProperties}>
+    <article ref={articleRef} className={`xhs-card-page xhs-card-page--${tid}`} data-page-id={page.id} style={template.vars as React.CSSProperties}>
+      {showOverflowBadge && isOverflowing ? (
+        <div className="overflow-badge" role="alert">内容超出，此页会被裁切</div>
+      ) : null}
       <header className="card-author">
         {avatarDataUrl ? (
           <img className="card-avatar" src={avatarDataUrl} alt={`${authorName}头像`} />

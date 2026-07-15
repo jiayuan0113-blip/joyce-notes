@@ -40,7 +40,9 @@ function normalizeInlineBreaks(lines: string[]): string[] {
     if (
       trimmed.startsWith("#") ||
       numberedHeadingPattern.test(trimmed) ||
-      trimmed.startsWith("![")
+      trimmed.startsWith("![") ||
+      trimmed.startsWith("> ") ||
+      /^[-·•]\s/.test(trimmed)
     ) {
       if (current) {
         paragraphs.push(current);
@@ -84,7 +86,7 @@ function hasInlineMarkdown(text: string): boolean {
 }
 
 function isStructuralMarkdown(text: string): boolean {
-  return text.startsWith("#") || text.startsWith("![") || numberedHeadingPattern.test(text) || emojiHeadingPattern.test(text) || bracketHeadingPattern.test(text);
+  return text.startsWith("#") || text.startsWith("![") || text.startsWith("> ") || /^[-·•]\s/.test(text) || numberedHeadingPattern.test(text) || emojiHeadingPattern.test(text) || bracketHeadingPattern.test(text);
 }
 
 function isHighlightCandidate(text: string): boolean {

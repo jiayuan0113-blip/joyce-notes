@@ -52,6 +52,7 @@ export function App() {
   const [templateId, setTemplateId] = useState("classic");
   const [showMarkdown, setShowMarkdown] = useState(false);
   const [exportMessage, setExportMessage] = useState("");
+  const [isExporting, setIsExporting] = useState(false);
   const previewRef = useRef<HTMLDivElement | null>(null);
   const exportRef = useRef<HTMLDivElement | null>(null);
 
@@ -134,9 +135,12 @@ export function App() {
   }
 
   async function handleExport() {
+    if (isExporting) return;
     const nodes = Array.from(exportRef.current?.querySelectorAll<HTMLElement>(".xhs-card-page") ?? []);
     if (nodes.length === 0) return;
 
+    setIsExporting(true);
+    setExportMessage("");
     try {
       const result = await exportCardNodes(nodes);
       if (result.zipBlob) {
@@ -154,6 +158,8 @@ export function App() {
       setExportMessage(`已生成 ${result.files.length} 张卡片`);
     } catch {
       setExportMessage("导出失败，请重试");
+    } finally {
+      setIsExporting(false);
     }
   }
 
@@ -164,10 +170,10 @@ export function App() {
         <button
           type="button"
           className="secondary-button"
-          disabled={pages.length === 0}
+          disabled={pages.length === 0 || isExporting}
           onClick={() => void handleExport()}
         >
-          导出
+          {isExporting ? "导出中…" : "导出"}
         </button>
       </header>
 
@@ -255,12 +261,24 @@ export function App() {
             {showMarkdown ? "收起 Markdown 微调" : "展开 Markdown 微调"}
           </button>
           {showMarkdown ? (
-            <textarea
-              className="raw-editor"
-              aria-label="处理后 Markdown"
-              value={processedMarkdown}
-              onChange={(event) => handleMarkdownChange(event.target.value)}
-            />
+            <>
+              <div className="syntax-ref">
+                <code># 标题</code>
+                <code>## 小标题</code>
+                <code>**加粗**</code>
+                <code>==高亮==</code>
+                <code>{"<u>下划线</u>"}</code>
+                <code>- 列表项</code>
+                <code>&gt; 引用</code>
+                <code>---（强制分页）</code>
+              </div>
+              <textarea
+                className="raw-editor"
+                aria-label="处理后 Markdown"
+                value={processedMarkdown}
+                onChange={(event) => handleMarkdownChange(event.target.value)}
+              />
+            </>
           ) : null}
         </section>
       ) : null}
@@ -283,6 +301,7 @@ export function App() {
                 page={page}
                 pageCount={pages.length}
                 pageIndex={index + 1}
+                showOverflowBadge
               />
             ))}
           </div>

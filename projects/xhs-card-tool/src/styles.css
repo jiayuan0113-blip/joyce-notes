@@ -276,6 +276,41 @@ textarea {
   margin: 0 0 34px;
 }
 
+.card-quote {
+  margin: 0 0 34px;
+  padding: 8px 0 8px 36px;
+  border-left: 6px solid var(--card-muted, #858585);
+  color: var(--card-muted, #858585);
+  font-size: 0.95em;
+}
+
+.overflow-badge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 5;
+  padding: 28px 0;
+  background: rgba(211, 75, 75, 0.92);
+  color: #ffffff;
+  text-align: center;
+  font-size: 56px;
+  font-weight: 700;
+}
+
+.card-list-item {
+  margin: 0 0 18px;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+
+.list-bullet {
+  display: inline-block;
+  width: 1.2em;
+  text-indent: 0;
+  font-weight: 700;
+}
+
 
 .text-bold {
   font-weight: 700;
@@ -359,6 +394,11 @@ textarea {
   border-bottom: 2px solid rgba(200, 60, 60, 0.6);
   padding: 0;
 }
+.xhs-card-page--magazine .card-quote {
+  font-style: italic;
+  border-left-width: 3px;
+}
+
 .xhs-card-page--magazine .card-author {
   margin-bottom: 52px;
 }
@@ -455,6 +495,11 @@ textarea {
 }
 .xhs-card-page--dark .card-avatar-fallback {
   border: 2px solid #444;
+}
+
+.xhs-card-page--dark .card-quote {
+  border-left-color: #ff9f1c;
+  color: #b0b0b0;
 }
 
 /* ========== Template: column (专栏) ========== */
@@ -592,6 +637,22 @@ textarea {
 
 .status-panel p:last-child {
   margin-bottom: 0;
+}
+
+.syntax-ref {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.syntax-ref code {
+  font-size: 12px;
+  padding: 3px 8px;
+  background: #f0ece4;
+  border-radius: 6px;
+  color: #5a5550;
+  white-space: nowrap;
 }
 
 .text-button {
